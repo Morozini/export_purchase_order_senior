@@ -15,7 +15,7 @@ class GetConsultaGeralService:
     def __init__(self):
         self.base_soap_senior = BaseSoapSenior
 
-    def get_nota_fiscal_entrada(self, dto) -> dict:
+    def get_ordem_de_compra(self, dto) -> dict:
         wsdl_url = "g5-senior-services/sapiens_Synccom_senior_g5_co_mcm_cpr_ordemcompra?wsdl"
         client = self.base_soap_senior.create_client_base(wsdl_url)
         usuario = os.getenv('USER_SENIOR')

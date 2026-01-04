@@ -1,19 +1,7 @@
-import json
-from app.use_cases.consultar_geral_use_case import ConsultarGeralUseCase
-from zeep.helpers import serialize_object
+import asyncio
+from app.core.executor import run_consulta
 
 
-request = {
-    "codigo_empresa": "10",
-    "codigo_filial": "1001",
-
-}
-
-use_case = ConsultarGeralUseCase(request)
-response = use_case.execute()
-response = serialize_object(response)
-
-with open("dados.json", "w", encoding="utf-8") as arquivo:
-    json.dump(response, arquivo, ensure_ascii=False, indent=4)
-
-print(response)
+if __name__ == "__main__":
+    asyncio.run(run_consulta())
+    print("Processo finalizado com sucesso!")
