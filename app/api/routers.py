@@ -6,7 +6,7 @@ from app.tasks import executar_task_ordem_compra
 router = APIRouter()
 
 @router.post("/execute")
-def execute_task_notas_fiscais():
+def executar_task_ordem_compra():
     task = executar_task_ordem_compra.delay()
     return {
         "message": "Task enviada com sucesso",

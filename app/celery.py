@@ -8,7 +8,7 @@ celery_app = Celery(
 
 celery_app.autodiscover_tasks(["app"])
 
-celery_app.conf.task_default_queue = "projeto_notas_fiscais_saida"
+celery_app.conf.task_default_queue = "projeto_ordem_de_compra"
 
 celery_app.conf.task_acks_late = True
 celery_app.conf.timezone = "America/Sao_Paulo" # type: ignore
