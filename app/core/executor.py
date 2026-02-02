@@ -1,8 +1,10 @@
 import logging
+from datetime import timedelta
 from tortoise import Tortoise
 
 from app.use_cases.consultar_geral_use_case import ConsultarGeralUseCase
 from app.database.config import init
+from app.utils.periodo_utils import gerar_periodos_mensais
 
 logging.basicConfig(
     level=logging.INFO,
@@ -35,23 +37,38 @@ async def executar_consulta_por_empresa_filial(request: dict):
     )
 
 
-async def run_consulta(empresas_filiais=None):
+async def run_consulta():
+    logger.info("Inicializando ORM (Tortoise)...")
+    await init()
+    logger.info("ORM inicializado com sucesso.")
+
     try:
-        logger.info("Inicializando ORM (Tortoise)...")
-        await init()
-        logger.info("ORM inicializado com sucesso.")
+        empresas_filiais = await get_empresas_filiais()
 
-        if not empresas_filiais:
-            empresas_filiais = await get_empresas_filiais()
+        for ef in empresas_filiais:
+            for data_inicio, data_fim in gerar_periodos_mensais(2026, 2026):
 
-        for request in empresas_filiais:
-            try:
-                await executar_consulta_por_empresa_filial(request)
-            except Exception as e:
-                logger.error(
-                    f"Erro Empresa {request['codigo_empresa']} | "
-                    f"Filial {request['codigo_filial']}: {e}",
-                    exc_info=True
+                logger.info(
+                    f"Iniciando | Empresa {ef['codigo_empresa']} | "
+                    f"Filial {ef['codigo_filial']} | "
+                    f"{data_inicio.strftime('%m/%Y')}"
+                )
+
+                request = {
+                    "codigo_empresa": ef["codigo_empresa"],
+                    "codigo_filial": ef["codigo_filial"],
+                    "data_inicio": data_inicio,
+                    "data_fim": data_fim,
+                }
+
+                use_case = ConsultarGeralUseCase(request)
+                result = await use_case.execute()
+
+                logger.info(
+                    f"Finalizado | Empresa {ef['codigo_empresa']} | "
+                    f"Filial {ef['codigo_filial']} | "
+                    f"{data_inicio.strftime('%m/%Y')} | "
+                    f"Total OC: {result['total']}"
                 )
 
     finally:

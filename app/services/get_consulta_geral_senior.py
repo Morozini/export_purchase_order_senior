@@ -21,7 +21,7 @@ class GetConsultaGeralService:
         usuario = os.getenv('USER_SENIOR')
         senha = os.getenv('PASSWORD_SENIOR')
         try:
-            return client.service.ConsultarGeral(
+            return client.service.ConsultarGeral_3(
                 user=usuario,
                 password=senha,
                 encryption=0,

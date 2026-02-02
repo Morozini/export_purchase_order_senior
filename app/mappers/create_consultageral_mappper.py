@@ -1,14 +1,11 @@
-from app.dto.get_consultar_geral_dto import GetConsultaGeralSeniorDTO
-
-
 class CreateConsultaGeralMapper:
 
     @staticmethod
-    def create(dto: GetConsultaGeralSeniorDTO):
+    def create(dto, dat_ini: str, dat_fim: str):
         return {
-            "codEmp":str(dto.codigo_empresa),
-            "codFil":str(dto.codigo_filial),
+            "codEmp": str(dto.codigo_empresa),
+            "codFil": str(dto.codigo_filial),
             "identificadorSistema": "TL",
-            "datEmiIni": "20/12/2025",
-            "datEmiFim": "31/12/2025",
+            "datEmiIni": dat_ini,
+            "datEmiFim": dat_fim,
         }
